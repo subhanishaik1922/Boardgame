@@ -1,0 +1,36 @@
+name: Boardgame Maven CI
+
+# Runs automatically whenever you push to 'main' (replaces manual Jenkins trigger)
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    # Replaces: agent any
+    runs-on: ubuntu-latest
+
+    steps:
+      # Replaces: stage('git checkout')
+      - name: Git Checkout
+        uses: actions/checkout@v4
+
+      # Replaces: tools { jdk 'jdk17' } (Maven is already pre-installed on ubuntu-latest)
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: maven
+
+      # Replaces: stage('compile')
+      - name: Compile
+        run: mvn compile
+
+      # Replaces: stage('test')
+      - name: Test
+        run: mvn test
+
+      # Replaces: stage('package')
+      - name: Package
+        run: mvn package
